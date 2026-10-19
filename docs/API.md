@@ -85,3 +85,10 @@ interval. Caller chronology/interval guarantees are required. Reset after reboot
 clock replacement or epoch change. There is no locking or interrupt-safety claim.
 Use externally serialised calls; copying/sharing large instances is the caller's
 responsibility. No hard-real-time, acquisition-rate, accuracy or safety claim is made.
+
+
+## 0.1.1 review clarifications
+
+See [INTEROPERABILITY.md](INTEROPERABILITY.md) for units, timestamp horizons, numeric validity, payload constraints and storage synchronisation.
+
+- Core reviewed: no confirmed functional defect; regression coverage and contract consistency strengthened.

@@ -3,11 +3,13 @@
 #ifndef SUPERJUPITER_SAMPLE_WINDOW_H
 #define SUPERJUPITER_SAMPLE_WINDOW_H
 
-#if defined(__FAST_MATH__) || (defined(__FINITE_MATH_ONLY__) && __FINITE_MATH_ONLY__ > 0)
-#error "SuperJupiter SampleWindow requires IEEE non-finite checks; disable fast-math/finite-math-only."
+#if defined(__FAST_MATH__) ||                                                  \
+    (defined(__FINITE_MATH_ONLY__) && __FINITE_MATH_ONLY__ > 0)
+#error                                                                         \
+    "SuperJupiter SampleWindow requires IEEE non-finite checks; disable fast-math/finite-math-only."
 #endif
 
-#define SUPERJUPITER_SAMPLE_WINDOW_VERSION "0.1.0"
+#define SUPERJUPITER_SAMPLE_WINDOW_VERSION "0.1.1"
 
 #include <float.h>
 #include <stddef.h>
@@ -26,19 +28,23 @@ inline bool finiteDouble(double value) {
 inline uint32_t saturatingIncrement(uint32_t value) {
   return value == UINT32_MAX ? value : value + 1U;
 }
-}  // namespace detail
+} // namespace detail
 
-enum class InputError : uint8_t { None, InvalidConfiguration, InvalidTimestamp };
+enum class InputError : uint8_t {
+  None,
+  InvalidConfiguration,
+  InvalidTimestamp
+};
 
 struct Config {
-  uint32_t expectedIntervalMs = 0;  // Zero disables gap detection.
+  uint32_t expectedIntervalMs = 0; // Zero disables gap detection.
   uint32_t gapToleranceMs = 0;
 };
 
 struct Sample {
-  float value = 0.0f;  // Raw value, including NaN, infinity and signed zero.
+  float value = 0.0f; // Raw value, including NaN, infinity and signed zero.
   uint32_t sampledAtMs = 0;
-  uint32_t intervalMs = 0;  // Since previous accepted entry, possibly evicted.
+  uint32_t intervalMs = 0; // Since previous accepted entry, possibly evicted.
   bool finite() const { return detail::finiteFloat(value); }
 };
 
@@ -61,9 +67,10 @@ struct Summary {
   uint32_t gapCount = 0;
   uint32_t oldestAtMs = 0;
   uint32_t latestAtMs = 0;
-  uint64_t spanMs = 0;  // Sum of retained intervals; can span multiple rollovers.
+  uint64_t spanMs =
+      0; // Sum of retained intervals; can span multiple rollovers.
   uint32_t largestIntervalMs = 0;
-  uint32_t overwrittenSinceReset = 0;  // Saturating count, not lost sensor data.
+  uint32_t overwrittenSinceReset = 0; // Saturating count, not lost sensor data.
   float minimum = 0.0f;
   float maximum = 0.0f;
   double mean = 0.0;
@@ -72,23 +79,24 @@ struct Summary {
 
 // One scalar stream, caller-owned capture clock, no heap/clock reads/locking.
 // Capacity bounds make the maximum retained-interval sum fit in uint64_t.
-template <size_t Capacity>
-class SampleWindow {
-  static_assert(Capacity > 0, "SuperJupiter SampleWindow requires positive capacity");
-  static_assert(Capacity <= 65535U, "SuperJupiter SampleWindow capacity exceeds 65535");
+template <size_t Capacity> class SampleWindow {
+  static_assert(Capacity > 0,
+                "SuperJupiter SampleWindow requires positive capacity");
+  static_assert(Capacity <= 65535U,
+                "SuperJupiter SampleWindow capacity exceeds 65535");
 
- public:
-  explicit SampleWindow(const Config& config = Config()) : config_(config) {
+public:
+  explicit SampleWindow(const Config &config = Config()) : config_(config) {
     reset();
   }
 
-  static bool validConfig(const Config& config) {
+  static bool validConfig(const Config &config) {
     return config.expectedIntervalMs <= maxInterval() &&
-      config.gapToleranceMs <= maxInterval() - config.expectedIntervalMs &&
-      (config.expectedIntervalMs != 0 || config.gapToleranceMs == 0);
+           config.gapToleranceMs <= maxInterval() - config.expectedIntervalMs &&
+           (config.expectedIntervalMs != 0 || config.gapToleranceMs == 0);
   }
   bool configured() const { return configured_; }
-  const Config& config() const { return config_; }
+  const Config &config() const { return config_; }
   size_t count() const { return count_; }
   static size_t capacity() { return Capacity; }
   bool full() const { return count_ == Capacity; }
@@ -134,34 +142,38 @@ class SampleWindow {
   }
 
   // Chronological index, zero is oldest. On failure output is unchanged.
-  bool sampleAt(size_t index, Sample& output) const {
-    if (index >= count_) return false;
+  bool sampleAt(size_t index, Sample &output) const {
+    if (index >= count_)
+      return false;
     output = samples_[physicalIndex(index)];
     return true;
   }
 
-  // O(count), sample-weighted population statistics over finite retained values.
-  // Non-finite arithmetic invalidates statistics; counts/timing remain available.
+  // O(count), sample-weighted population statistics over finite retained
+  // values. Non-finite arithmetic invalidates statistics; counts/timing remain
+  // available.
   Summary summary() const {
     Summary result;
     result.configured = configured_;
     result.storedCount = count_;
     result.full = full();
     result.overwrittenSinceReset = overwritten_;
-    if (count_ == 0) return result;
+    if (count_ == 0)
+      return result;
     result.oldestAtMs = samples_[first_].sampledAtMs;
     result.latestAtMs = lastAtMs_;
     double mean = 0.0;
     double m2 = 0.0;
     for (size_t i = 0; i < count_; ++i) {
-      const Sample& sample = samples_[physicalIndex(i)];
+      const Sample &sample = samples_[physicalIndex(i)];
       // The first entry's incoming interval starts outside the retained window.
       if (i != 0) {
         result.spanMs += sample.intervalMs;
         if (sample.intervalMs > result.largestIntervalMs)
           result.largestIntervalMs = sample.intervalMs;
         if (config_.expectedIntervalMs != 0 &&
-            sample.intervalMs > config_.expectedIntervalMs + config_.gapToleranceMs) {
+            sample.intervalMs >
+                config_.expectedIntervalMs + config_.gapToleranceMs) {
           ++result.gapCount;
         }
       }
@@ -175,8 +187,10 @@ class SampleWindow {
         mean = sample.value;
         continue;
       }
-      if (sample.value < result.minimum) result.minimum = sample.value;
-      if (sample.value > result.maximum) result.maximum = sample.value;
+      if (sample.value < result.minimum)
+        result.minimum = sample.value;
+      if (sample.value > result.maximum)
+        result.maximum = sample.value;
       if (!result.numericError) {
         const double value = sample.value;
         const double delta = value - mean;
@@ -184,7 +198,8 @@ class SampleWindow {
         const double deltaAfterMean = value - mean;
         m2 += delta * deltaAfterMean;
         if (!detail::finiteDouble(delta) || !detail::finiteDouble(mean) ||
-            !detail::finiteDouble(m2) || m2 < 0.0) result.numericError = true;
+            !detail::finiteDouble(m2) || m2 < 0.0)
+          result.numericError = true;
       }
     }
     result.hasGap = result.gapCount != 0;
@@ -201,7 +216,7 @@ class SampleWindow {
     return result;
   }
 
- private:
+private:
   static uint32_t maxInterval() { return 0x7fffffffUL; }
   size_t physicalIndex(size_t offset) const {
     // Avoid overflowing 16-bit size_t on AVR before applying ring arithmetic.
@@ -218,6 +233,6 @@ class SampleWindow {
   bool configured_ = true;
 };
 
-}  // namespace sample_window
-}  // namespace superjupiter
+} // namespace sample_window
+} // namespace superjupiter
 #endif

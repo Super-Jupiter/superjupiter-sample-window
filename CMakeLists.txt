@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(SuperJupiterSampleWindow VERSION 0.1.0 LANGUAGES CXX)
+project(SuperJupiterSampleWindow VERSION 0.1.1 LANGUAGES CXX)
 
 set(_superjupiter_sample_window_top_level OFF)
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
@@ -19,6 +19,9 @@ target_compile_features(SuperJupiterSampleWindow INTERFACE cxx_std_11)
 
 if(SUPERJUPITER_SAMPLE_WINDOW_BUILD_TESTS)
   enable_testing()
+  add_executable(superjupiter-sample-window-review tests/review_regressions.cpp)
+  target_link_libraries(superjupiter-sample-window-review PRIVATE SuperJupiter::SampleWindow)
+  add_test(NAME superjupiter-sample-window-review COMMAND superjupiter-sample-window-review)
   add_executable(superjupiter-sample-window-tests tests/test_sample_window.cpp)
   target_link_libraries(superjupiter-sample-window-tests PRIVATE SuperJupiter::SampleWindow)
   add_test(NAME superjupiter-sample-window-tests COMMAND superjupiter-sample-window-tests)

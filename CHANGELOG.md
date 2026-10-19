@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 - 2026-10-19
+
+- Core reviewed: no confirmed functional defect; regression coverage and contract consistency strengthened.
+- Added focused review regression tests and shared interoperability guidance. Hardware validation pending.
+
+
 ## 0.1.0 - 2026-10-19
 
 - Initial original public preview by SuperJupiter.

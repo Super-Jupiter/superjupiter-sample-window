@@ -9,7 +9,7 @@ A small, allocation-free C++11 last-N-observations window for Arduino, ESP32 and
 host applications. Preserve raw values, inspect them in chronological order and
 report finite-only statistics, invalid values, observed gaps and overwrites.
 
-**Early preview, 0.1.0. Physical hardware validation is pending.** Software tests
+**Early preview, 0.1.1. Physical hardware validation is pending.** Software tests
 and board compilation are separate from real device measurements. This is not a
 sensor driver, calibration system, physical fault detector or safety certification.
 
@@ -29,10 +29,10 @@ contains it. For an exact version after indexing:
 
 ```sh
 arduino-cli lib update-index
-arduino-cli lib install "SuperJupiterSampleWindow@0.1.0"
+arduino-cli lib install "SuperJupiterSampleWindow@0.1.1"
 ```
 
-The [release ZIP](https://github.com/Super-Jupiter/superjupiter-sample-window/releases/tag/v0.1.0)
+The [release ZIP](https://github.com/Super-Jupiter/superjupiter-sample-window/releases/tag/v0.1.1)
 also works with **Sketch > Include Library > Add .ZIP Library**. Open
 **File > Examples > SuperJupiterSampleWindow > MinimalWindow** and select
 **115200 baud**. No sensor is needed for either bundled example.
@@ -43,11 +43,11 @@ Use the [registry package](https://registry.platformio.org/libraries/superjupite
 with an exact pin after publication:
 
 ```ini
-lib_deps = superjupiter/SuperJupiterSampleWindow@0.1.0
+lib_deps = superjupiter/SuperJupiterSampleWindow@0.1.1
 ```
 
-`@^0.1.0` permits compatible updates; it is not an exact pin. A source alternative
-is `https://github.com/Super-Jupiter/superjupiter-sample-window.git#v0.1.0`.
+`@^0.1.1` permits compatible updates; it is not an exact pin. A source alternative
+is `https://github.com/Super-Jupiter/superjupiter-sample-window.git#v0.1.1`.
 
 ## Quick start
 
@@ -176,3 +176,10 @@ Read [CONTRIBUTING.md](https://github.com/Super-Jupiter/superjupiter-sample-wind
 and [SECURITY.md](https://github.com/Super-Jupiter/superjupiter-sample-window/blob/main/SECURITY.md).
 No guaranteed support response time, hardware validation or maintenance service
 level is claimed.
+
+
+## Compatibility review 0.1.1
+
+This patch includes independent regression tests and a reviewed [interoperability contract](https://github.com/Super-Jupiter/superjupiter-sample-window/blob/v0.1.1/docs/INTEROPERABILITY.md). Hardware validation pending.
+
+- Core reviewed: no confirmed functional defect; regression coverage and contract consistency strengthened.

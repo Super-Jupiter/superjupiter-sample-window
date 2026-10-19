@@ -43,7 +43,21 @@ def normalised_files(files):
     return result
 
 
+
+def validate_review_contract():
+    import re
+    manifest=json.loads((ROOT/'library.json').read_text())
+    header=(ROOT/'src'/manifest['headers'][0]).read_text()
+    versions=re.findall(r'^#define\s+SUPERJUPITER_\w+_VERSION\s+"([^"]+)"',header,re.M)
+    assert versions==[manifest['version']], 'Public version macro mismatch'
+    assert all(a['name']=='SuperJupiter' for a in manifest['authors'])
+    assert manifest['license']=='MIT'
+    assert 'hardware validation pending' in (ROOT/'README.md').read_text().lower()
+    assert (ROOT/'docs/INTEROPERABILITY.md').is_file()
+    assert (ROOT/'tests/review_regressions.cpp').is_file()
+
 def main():
+    validate_review_contract()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tag')
     parser.add_argument('--require-clean', action='store_true')
@@ -69,7 +83,7 @@ def main():
         assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True).strip(), 'Working tree is not clean'
     if args.archive:
         files = normalised_files(package_files(args.archive))
-        required = ['library.json', 'library.properties', 'src/SuperJupiterSampleWindow.h', 'LICENSE',
+        required = ['tests/review_regressions.cpp','docs/INTEROPERABILITY.md','library.json', 'library.properties', 'src/SuperJupiterSampleWindow.h', 'LICENSE',
                     'README.md', 'CHANGELOG.md', 'docs/API.md', 'docs/MIGRATION.md', 'docs/CONVENTIONS.md',
                     'docs/VALIDATION.md', 'CMakeLists.txt', 'cmake/SuperJupiterSampleWindowConfig.cmake.in',
                     'tests/test_sample_window.cpp', 'tests/namespace_isolation.cpp', 'tests/consumer/main.cpp',

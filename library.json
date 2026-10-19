@@ -1,6 +1,6 @@
 {
   "name": "SuperJupiterSampleWindow",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Timestamped raw sample windows by SuperJupiter for Arduino, ESP32 and C++11. Fixed capacity, finite-only statistics, explicit gaps, invalid counts and overwrite reporting. Hardware validation pending.",
   "keywords": [
     "sensor",

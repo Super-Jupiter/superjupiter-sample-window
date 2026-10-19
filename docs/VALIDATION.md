@@ -43,3 +43,8 @@ Release/archive checksums and registry processing are verified separately.
 5. Record memory, summary/push timing, disconnect/recovery and measured output.
 6. State exactly what was executed and any limitations. Do not imply one board
    test validates every board or demonstrates sensor accuracy.
+
+
+## Release 0.1.1
+
+Hardware validation pending. Independent review regressions run under GCC/Clang sanitizers, source/archive/relocated CMake consumers and the four-board compilation matrix. The exact release commit CI and release receipts are authoritative; a historical failure is not a current passing result. No physical device, sensor or storage power-loss test is claimed.
