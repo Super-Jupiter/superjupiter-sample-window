@@ -1,0 +1,50 @@
+{
+  "name": "SuperJupiterSampleWindow",
+  "version": "0.1.0",
+  "description": "Timestamped raw sample windows by SuperJupiter for Arduino, ESP32 and C++11. Fixed capacity, finite-only statistics, explicit gaps, invalid counts and overwrite reporting. Hardware validation pending.",
+  "keywords": [
+    "sensor",
+    "statistics",
+    "circular-buffer",
+    "esp32",
+    "arduino",
+    "time-series"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Super-Jupiter/superjupiter-sample-window.git"
+  },
+  "homepage": "https://github.com/Super-Jupiter/superjupiter-sample-window",
+  "authors": [
+    {
+      "name": "SuperJupiter",
+      "url": "https://www.superjupiter.net",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "frameworks": "*",
+  "platforms": "*",
+  "headers": [
+    "SuperJupiterSampleWindow.h"
+  ],
+  "export": {
+    "include": [
+      "src/*",
+      "examples/*",
+      "docs/*",
+      "tests/*",
+      "tools/*",
+      "README.md",
+      "LICENSE",
+      "CHANGELOG.md",
+      "CONTRIBUTING.md",
+      "SECURITY.md",
+      "CMakeLists.txt",
+      "library.json",
+      "library.properties",
+      "cmake/*",
+      "extras/*"
+    ]
+  }
+}

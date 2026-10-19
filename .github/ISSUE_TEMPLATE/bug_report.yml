@@ -1,0 +1,18 @@
+name: Bug report
+description: Report unexpected data-quality behaviour.
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Version and environment
+      description: Library version, board, compiler and Arduino core if relevant. No credentials.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Configuration, input values/timestamps, expected flags and actual flags. State whether data is synthetic or measured.
+      render: cpp
+    validations:
+      required: true
