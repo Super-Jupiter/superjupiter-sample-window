@@ -1,5 +1,33 @@
 # SuperJupiter SampleWindow
 
+<!-- SUPERJUPITER-CONSOLIDATION-MIGRATION:START -->
+## Consolidated library available
+
+For new projects, start with **[SuperJupiter Sensor Toolkit](https://github.com/Super-Jupiter/superjupiter-sensor-toolkit)**. This standalone package and its published releases remain available. Existing installations need no change.
+
+If migrating with PlatformIO, replace the standalone dependency with:
+
+```ini
+lib_deps = superjupiter/SuperJupiterSensorToolkit@0.1.0
+```
+
+Replace this standalone include:
+
+```cpp
+#include <SuperJupiterSampleWindow.h>
+```
+
+with this consolidated include:
+
+```cpp
+#include <SuperJupiter/SensorToolkit/SampleWindow.h>
+```
+
+The component namespace and behaviour are preserved from standalone **0.1.1**. If using an earlier version, review its API migration requirements first. Use one implementation of this component per application; do not mix standalone and consolidated copies.
+
+See the [consolidated migration guide](https://github.com/Super-Jupiter/superjupiter-sensor-toolkit/blob/v0.1.0/docs/MIGRATION.md) and consolidated README for Arduino/CMake installation. **Hardware validation pending.**
+<!-- SUPERJUPITER-CONSOLIDATION-MIGRATION:END -->
+
 [![CI](https://github.com/Super-Jupiter/superjupiter-sample-window/actions/workflows/ci.yml/badge.svg)](https://github.com/Super-Jupiter/superjupiter-sample-window/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Super-Jupiter/superjupiter-sample-window/blob/main/LICENSE)
 
